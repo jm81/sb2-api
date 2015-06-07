@@ -11,3 +11,4 @@ end
 
 gem 'sqlite3'
 gem 'sequel-rails', '~> 0.9.11'
+gem 'word_count_analyzer', '~> 0.0.14'
