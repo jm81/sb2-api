@@ -10,5 +10,7 @@ group :development, :test do
 end
 
 gem 'sqlite3'
+
+gem 'rocket_pants', '~> 1.12.1'
 gem 'sequel-rails', '~> 0.9.11'
 gem 'word_count_analyzer', '~> 0.0.14'
