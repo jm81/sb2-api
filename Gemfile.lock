@@ -53,6 +53,7 @@ GEM
     moneta (0.8.0)
     multi_xml (0.5.5)
     rack (1.5.3)
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.1.6)
@@ -124,6 +125,7 @@ PLATFORMS
 
 DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
+  rack-cors (~> 0.4.0)
   rails (= 4.1.6)
   rails-api
   rocket_pants (~> 1.12.1)
