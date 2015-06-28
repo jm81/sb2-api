@@ -34,5 +34,14 @@ RSpec.configure do |config|
   #
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
-  config.infer_spec_type_from_file_location!
+  # config.infer_spec_type_from_file_location!
+  #
+  config.around(:each) do |example|
+    Sequel::Model.db.transaction(rollback: :always, auto_savepoint: true) do
+      example.run
+    end
+  end
+
+  config.include RocketPants::TestHelper, type: :controller
+  config.include RocketPants::RSpecMatchers, type: :controller
 end
