@@ -29,5 +29,9 @@ module Sb2Api
         resource '*', headers: :any, methods: [:get, :post, :options]
       end
     end
+
+    config.sequel.after_connect = proc do
+      Sequel::Model.plugin :timestamps, update_on_create: true
+    end
   end
 end
