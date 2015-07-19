@@ -15,11 +15,20 @@ Sequel.migration do
       column :created_at, "timestamp"
       column :updated_at, "timestamp"
     end
+    
+    create_table(:users) do
+      primary_key :id
+      column :email, "varchar(255)"
+      column :display_name, "varchar(255)"
+      column :created_at, "timestamp", :null=>false
+      column :updated_at, "timestamp", :null=>false
+    end
   end
 end
               Sequel.migration do
                 change do
                   self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150607204520_create_stories.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719191625_stories_timestamps.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719192646_create_users.rb')"
                 end
               end
