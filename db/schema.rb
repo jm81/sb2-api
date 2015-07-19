@@ -12,11 +12,14 @@ Sequel.migration do
       column :body, "text"
       column :level, "integer", :null=>false
       column :words, "integer", :null=>false
+      column :created_at, "timestamp"
+      column :updated_at, "timestamp"
     end
   end
 end
-Sequel.migration do
-  change do
-    self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150607204520_create_stories.rb')"
-  end
-end
+              Sequel.migration do
+                change do
+                  self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150607204520_create_stories.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719191625_stories_timestamps.rb')"
+                end
+              end
