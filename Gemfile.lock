@@ -104,6 +104,8 @@ GEM
       activemodel
       railties (>= 3.2.0)
       sequel (>= 3.28, < 5.0)
+    sequel_enum (0.0.1)
+      sequel
     spring (1.3.6)
     sprockets (3.2.0)
       rack (~> 1.0)
@@ -131,6 +133,7 @@ DEPENDENCIES
   rocket_pants (~> 1.12.1)
   rspec-rails (~> 3.0)
   sequel-rails (~> 0.9.11)
+  sequel_enum (~> 0.0.1)
   spring
   sqlite3
   word_count_analyzer (~> 0.0.14)
