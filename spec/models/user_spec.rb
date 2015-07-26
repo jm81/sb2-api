@@ -44,4 +44,40 @@ RSpec.describe User, type: :model do
         to raise_error(Sequel::ForeignKeyConstraintViolation)
     end
   end
+
+  describe '.find_by_email' do
+    let!(:existing) { FactoryGirl.create(:user, email: 'test@example.com') }
+
+    context 'existing User with given email' do
+      it 'gets existing User' do
+        expect(User.find_by_email('test@example.com')).to eq(existing)
+        expect(User.find_by_email('  test@example.com ')).to eq(existing)
+        expect(User.find_by_email('TEST@example.com')).to eq(existing)
+      end
+    end
+
+    context 'no existing User with given email' do
+      it 'is nil' do
+        expect(User).to receive(:where).twice.and_call_original
+        expect(User.find_by_email('other@example.com')).to be(nil)
+        expect(User.find_by_email('test@example.org')).to be(nil)
+      end
+    end
+
+    context 'nil email' do
+      it 'is nil' do
+        expect(User).to_not receive(:where)
+        expect(User.find_by_email(nil)).to be(nil)
+      end
+    end
+
+    context 'invalid email' do
+      it 'is nil' do
+        expect(User).to_not receive(:where)
+        expect(User.find_by_email('')).to be(nil)
+        expect(User.find_by_email('@example.com')).to be(nil)
+        expect(User.find_by_email('test')).to be(nil)
+      end
+    end
+  end
 end
