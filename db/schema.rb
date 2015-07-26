@@ -34,6 +34,14 @@ Sequel.migration do
       
       index [:provider, :provider_id], :unique=>true
     end
+    
+    create_table(:auth_tokens) do
+      primary_key :id
+      foreign_key :user_id, :users, :on_delete=>:restrict, :on_update=>:cascade
+      foreign_key :auth_method_id, :auth_methods, :on_delete=>:restrict, :on_update=>:cascade
+      column :created_at, "timestamp", :null=>false
+      column :last_used_at, "timestamp", :null=>false
+    end
   end
 end
               Sequel.migration do
@@ -42,5 +50,6 @@ end
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719191625_stories_timestamps.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719192646_create_users.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725205217_create_auth_methods.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725235454_create_auth_tokens.rb')"
                 end
               end
