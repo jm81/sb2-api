@@ -11,6 +11,7 @@ end
 
 gem 'sqlite3'
 
+gem 'jwt', '~> 1.5.1'
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors'
 gem 'rocket_pants', '~> 1.12.1'
 gem 'sequel_enum', '~> 0.0.1'

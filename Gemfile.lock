@@ -46,6 +46,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
     json (1.8.3)
+    jwt (1.5.1)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.6.1)
@@ -127,6 +128,7 @@ PLATFORMS
 
 DEPENDENCIES
   factory_girl_rails (~> 4.5.0)
+  jwt (~> 1.5.1)
   rack-cors (~> 0.4.0)
   rails (= 4.1.6)
   rails-api
