@@ -4,6 +4,6 @@ FactoryGirl.define do
 
     user
     provider :test
-    provider_id 1
+    sequence(:provider_id) { |n| n }
   end
 end
