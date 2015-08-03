@@ -1,2 +1,5 @@
+--profile 4
 --color
+--format Fuubar
+--tag focus
 --require spec_helper

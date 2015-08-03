@@ -6,7 +6,10 @@ gem 'spring', group: :development
 
 group :development, :test do
   gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'fuubar', '~> 2.0'
+  gem 'rspec-autotest', '~> 1.0'
   gem 'rspec-rails', '~> 3.0'
+  gem 'ZenTest', '~> 4.0'
 end
 
 gem 'sqlite3'
