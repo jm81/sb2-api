@@ -54,4 +54,32 @@ RSpec.describe AuthMethod, type: :model do
       expect(token.last_used_at).to be_a(Time)
     end
   end
+
+  describe '.by_provider_data' do
+    let!(:auth_methods) do
+      [
+        FactoryGirl.create(
+          :auth_method, provider_name: :github, provider_id: 2
+        ),
+        FactoryGirl.create(
+          :auth_method, provider_name: :github, provider_id: 4
+        )
+      ]
+    end
+
+    it 'gets an AuthMethod from provider_name and provider_id' do
+      expect(
+        AuthMethod.by_provider_data(provider_name: :github, provider_id: 2)
+      ).to eq(auth_methods[0])
+      expect(
+        AuthMethod.by_provider_data(provider_name: :github, provider_id: '4')
+      ).to eq(auth_methods[1])
+      expect(
+        AuthMethod.by_provider_data(provider_name: :other, provider_id: 2)
+      ).to be(nil)
+      expect(
+        AuthMethod.by_provider_data(provider_name: :github, provider_id: 1)
+      ).to be(nil)
+    end
+  end
 end
