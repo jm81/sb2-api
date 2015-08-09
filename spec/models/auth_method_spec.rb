@@ -30,12 +30,12 @@ RSpec.describe AuthMethod, type: :model do
     end
   end
 
-  describe '#provider' do
+  describe '#provider_name' do
     it 'is an enum' do
       { test: 1, github: 2 }.each do |value, index|
-        auth_method.provider = value
-        expect(auth_method.provider).to eq(value)
-        expect(auth_method[:provider]).to eq(index)
+        auth_method.provider_name = value
+        expect(auth_method.provider_name).to eq(value)
+        expect(auth_method[:provider_name]).to eq(index)
       end
     end
   end

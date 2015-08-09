@@ -27,12 +27,12 @@ Sequel.migration do
     create_table(:auth_methods) do
       primary_key :id
       foreign_key :user_id, :users, :on_delete=>:cascade, :on_update=>:cascade
-      column :provider, "tinyint unsigned", :null=>false
+      column :provider_name, "tinyint unsigned", :null=>false
       column :provider_id, "integer unsigned", :null=>false
       column :created_at, "timestamp", :null=>false
       column :updated_at, "timestamp", :null=>false
       
-      index [:provider, :provider_id], :unique=>true
+      index [:provider_name, :provider_id], :unique=>true
     end
     
     create_table(:auth_tokens) do
@@ -51,5 +51,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719191625_st
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719192646_create_users.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725205217_create_auth_methods.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725235454_create_auth_tokens.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150809211350_rename_auth_methods_provider_name.rb')"
                 end
               end

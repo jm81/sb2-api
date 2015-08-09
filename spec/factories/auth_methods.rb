@@ -3,7 +3,7 @@ FactoryGirl.define do
     to_create { |resource| resource.save }
 
     user
-    provider :test
+    provider_name :test
     sequence(:provider_id) { |n| n }
   end
 end

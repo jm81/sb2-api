@@ -5,7 +5,8 @@ class AuthMethod < Sequel::Model
 
   one_to_many :auth_tokens
 
-  enum :provider, { 1 => :test, 2 => :github }
+  PROVIDERS = { 1 => :test, 2 => :github }
+  enum :provider_name, PROVIDERS
 
   # Create AuthToken, setting user and last_used_at
   #

@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
     before(:each) { user.save }
 
     let!(:auth_method) do
-      user.add_auth_method(provider: :test, provider_id: 1)
+      user.add_auth_method provider_name: :test, provider_id: 1
     end
 
     it 'has many' do
