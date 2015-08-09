@@ -39,4 +39,19 @@ RSpec.describe AuthMethod, type: :model do
       end
     end
   end
+
+  describe '#create_token' do
+    before(:each) { auth_method.save }
+
+    it 'creates an AuthToken, setting user and last_used_at' do
+      token = nil
+      expect { token = auth_method.create_token }.
+        to change(AuthToken, :count).by(1)
+
+      token.reload
+      expect(token.user).to be_a(User)
+      expect(token.user).to eq(auth_method.user)
+      expect(token.last_used_at).to be_a(Time)
+    end
+  end
 end
