@@ -80,4 +80,184 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '.oauth_login' do
+    let(:oauth) { double 'OAuth' }
+
+    let!(:user) do
+      FactoryGirl.create :user, email: 'existing-user@example.com',
+        display_name: 'Existing User'
+    end
+
+    let!(:auth_method) do
+      FactoryGirl.create :auth_method,
+        user: user, provider_name: :github, provider_id: 5
+    end
+
+    def login
+      @login_token = User.oauth_login oauth
+      @login_user = @login_token.user
+      @login_method = @login_token.auth_method
+      user.reload
+      auth_method.reload
+    end
+
+    context 'existing AuthMethod' do
+      before(:each) do
+        expect(oauth).to_not receive(:email)
+
+        expect(oauth).to receive(:provider_data) do
+          { provider_name: :github, provider_id: 5 }
+        end
+      end
+
+      it 'uses existing (does not create) User' do
+        expect { login }.to_not change(User, :count)
+        expect(@login_user.id).to eq(user.id)
+        expect(@login_user.email).to eq('existing-user@example.com')
+        expect(@login_user.display_name).to eq('Existing User')
+      end
+
+      it 'uses existing (does not create) AuthMethod' do
+        expect { login }.to_not change(AuthMethod, :count)
+        expect(@login_method.id).to eq(auth_method.id)
+      end
+
+      it 'creates and returns AuthToken' do
+        expect { login }.to change(AuthToken, :count).by(1)
+        expect(@login_token.user.id).to eq(user.id)
+        expect(@login_token.auth_method.id).to eq(auth_method.id)
+        expect(@login_token.last_used_at).to be_a(Time)
+      end
+    end
+
+    context 'no existing AuthMethod' do
+      before(:each) do
+        expect(oauth).to receive(:provider_data).twice do
+          { provider_name: :github, provider_id: 10 }
+        end
+      end
+
+      context 'User found with same email' do
+        before(:each) do
+          expect(oauth).to receive(:email) { 'existing-user@example.com' }
+        end
+
+        it 'uses existing (does not create) a new User' do
+          expect { login }.to_not change(User, :count)
+          expect(@login_user.id).to eq(user.id)
+          expect(@login_user.email).to eq('existing-user@example.com')
+          expect(@login_user.display_name).to eq('Existing User')
+        end
+
+        it 'creates a new AuthMethod' do
+          expect { login }.to change(AuthMethod, :count).by(1)
+          expect(auth_method.provider_id).to eq(5)
+          expect(@login_method.id).to_not eq(auth_method.id)
+          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_id).to eq(10)
+          expect(@login_method.user.id).to eq(user.id)
+        end
+
+        it 'creates and returns AuthToken' do
+          expect { login }.to change(AuthToken, :count).by(1)
+          expect(@login_token.user.id).to eq(user.id)
+          expect(@login_token.auth_method.id).to eq(@login_method.id)
+          expect(@login_token.last_used_at).to be_a(Time)
+        end
+      end
+
+      context 'No User found with valid OAuth email' do
+        before(:each) do
+          expect(oauth).to receive(:email).twice { 'new-user@example.com' }
+          expect(oauth).to receive(:display_name) { 'New Name' }
+        end
+
+        it 'creates a new User' do
+          expect { login }.to change(User, :count).by(1)
+          expect(user.display_name).to eq('Existing User')
+          expect(@login_user.email).to eq('new-user@example.com')
+          expect(@login_user.display_name).to eq('New Name')
+        end
+
+        it 'creates a new AuthMethod' do
+          expect { login }.to change(AuthMethod, :count).by(1)
+          expect(auth_method.provider_id).to eq(5)
+          expect(@login_method.id).to_not eq(auth_method.id)
+          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_id).to eq(10)
+          expect(@login_method.user.id).to eq(@login_user.id)
+        end
+
+        it 'creates and returns AuthToken' do
+          expect { login }.to change(AuthToken, :count).by(1)
+          expect(@login_token.user.id).to eq(@login_user.id)
+          expect(@login_token.auth_method.id).to eq(@login_method.id)
+          expect(@login_token.last_used_at).to be_a(Time)
+        end
+      end
+
+      context 'OAuth email is empty' do
+        before(:each) do
+          user.update email: ''
+          expect(oauth).to receive(:email).twice { '' }
+          expect(oauth).to receive(:display_name) { 'New Name' }
+        end
+
+        it 'creates a new User' do
+          expect { login }.to change(User, :count).by(1)
+          expect(user.display_name).to eq('Existing User')
+          expect(@login_user.email).to eq('')
+          expect(@login_user.display_name).to eq('New Name')
+        end
+
+        it 'creates a new AuthMethod' do
+          expect { login }.to change(AuthMethod, :count).by(1)
+          expect(auth_method.provider_id).to eq(5)
+          expect(@login_method.id).to_not eq(auth_method.id)
+          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_id).to eq(10)
+          expect(@login_method.user.id).to eq(@login_user.id)
+        end
+
+        it 'creates and returns AuthToken' do
+          expect { login }.to change(AuthToken, :count).by(1)
+          expect(@login_token.user.id).to eq(@login_user.id)
+          expect(@login_token.auth_method.id).to eq(@login_method.id)
+          expect(@login_token.last_used_at).to be_a(Time)
+        end
+      end
+
+      context 'OAuth email is invalid' do
+        before(:each) do
+          user.update email: 'invalid'
+          expect(oauth).to receive(:email).twice { 'invalid' }
+          expect(oauth).to receive(:display_name) { 'New Name' }
+        end
+
+        it 'creates a new User' do
+          expect { login }.to change(User, :count).by(1)
+          expect(user.display_name).to eq('Existing User')
+          expect(@login_user.email).to eq('invalid')
+          expect(@login_user.display_name).to eq('New Name')
+        end
+
+        it 'creates a new AuthMethod' do
+          expect { login }.to change(AuthMethod, :count).by(1)
+          expect(auth_method.provider_id).to eq(5)
+          expect(@login_method.id).to_not eq(auth_method.id)
+          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_id).to eq(10)
+          expect(@login_method.user.id).to eq(@login_user.id)
+        end
+
+        it 'creates and returns AuthToken' do
+          expect { login }.to change(AuthToken, :count).by(1)
+          expect(@login_token.user.id).to eq(@login_user.id)
+          expect(@login_token.auth_method.id).to eq(@login_method.id)
+          expect(@login_token.last_used_at).to be_a(Time)
+        end
+      end
+    end
+  end
 end

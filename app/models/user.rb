@@ -16,5 +16,30 @@ class User < Sequel::Model
         nil
       end
     end
+
+    # Login from OAuth.
+    #
+    # First try to find an AuthMethod matching the provider data. If none, find
+    # or create a User based on email, then create an AuthMethod. Finally,
+    # create and return an AuthToken.
+    #
+    # @param oauth [OAuth::Base]
+    #   OAuth login object, include #provider_data (Hash with provider_name and
+    #   provider_id), #email and #display_name.
+    # @return [AuthToken]
+    def oauth_login oauth
+      method = AuthMethod.by_provider_data oauth.provider_data
+
+      if !method
+        user = find_by_email(oauth.email) || create(
+          email: oauth.email.downcase,
+          display_name: oauth.display_name
+        )
+
+        method = user.add_auth_method oauth.provider_data
+      end
+
+      method.create_token
+    end
   end
 end
