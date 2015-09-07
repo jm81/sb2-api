@@ -1,4 +1,4 @@
-class StoriesController < RocketPants::Base
+class StoriesController < APIController
   version 1
 
   def index
