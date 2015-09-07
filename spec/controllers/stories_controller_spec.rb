@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/shared/auth'
 
 RSpec.describe StoriesController, type: :controller do
   let!(:story) { FactoryGirl.create(:story) }
@@ -7,9 +8,15 @@ RSpec.describe StoriesController, type: :controller do
   describe 'get index' do
     before(:each) { stories }
 
-    def do_get
-      get :index, version: 1
+    def get_args
+      [:index, version: 1]
     end
+
+    def do_get
+      get(*get_args)
+    end
+
+    it_behaves_like 'an API action with current user'
 
     it 'returns a json collection' do
       do_get
