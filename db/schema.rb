@@ -41,6 +41,7 @@ Sequel.migration do
       foreign_key :auth_method_id, :auth_methods, :on_delete=>:restrict, :on_update=>:cascade
       column :created_at, "timestamp", :null=>false
       column :last_used_at, "timestamp", :null=>false
+      column :closed_at, "timestamp"
     end
   end
 end
@@ -52,5 +53,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150719192646_cr
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725205217_create_auth_methods.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725235454_create_auth_tokens.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150809211350_rename_auth_methods_provider_name.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150907235022_add_auth_tokens_closed_at.rb')"
                 end
               end

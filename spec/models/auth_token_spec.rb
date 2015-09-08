@@ -17,6 +17,25 @@ RSpec.describe AuthToken, type: :model do
     end
   end
 
+  describe '#close!' do
+    context '#closed_at is not set' do
+      it 'sets #closed_at' do
+        auth_token.save
+        auth_token.close!
+        expect(auth_token.reload.closed_at).to be_a(Time)
+      end
+    end
+
+    context '#closed_at is set' do
+      it 'does nothing' do
+        auth_token.closed_at = Time.now - 1200
+        auth_token.save
+        auth_token.close!
+        expect(auth_token.reload.closed_at).to be <= Time.now - 1200
+      end
+    end
+  end
+
   describe '#encoded' do
     before(:each) { auth_token.save }
 
@@ -41,6 +60,14 @@ RSpec.describe AuthToken, type: :model do
     context '#last_used_at not set' do
       it 'is false' do
         auth_token.last_used_at = nil
+        expect(auth_token.open?).to be(false)
+        expect(auth_token.expired?).to be(true)
+      end
+    end
+
+    context '#closed_at is set' do
+      it 'is false' do
+        auth_token.closed_at = Time.now
         expect(auth_token.open?).to be(false)
         expect(auth_token.expired?).to be(true)
       end

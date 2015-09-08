@@ -9,6 +9,11 @@ class AuthToken < Sequel::Model
   many_to_one :auth_method
   many_to_one :user
 
+  # Set #closed_at. Called, for example, when logging out.
+  def close!
+    self.update(closed_at: Time.now) unless self.closed_at
+  end
+
   # @return [String]
   #   { auth_token_id: self.id } encoded via JWT for passing to client.
   def encoded
@@ -20,9 +25,9 @@ class AuthToken < Sequel::Model
     !open?
   end
 
-  # @return [Boolean] True if token is not expired.
+  # @return [Boolean] True if token is not expired or closed.
   def open?
-    !(last_used_at.nil?) && Time.now <= expires_at
+    !(last_used_at.nil?) && !closed_at && Time.now <= expires_at
   end
 
   # @return [DateTime] Time when this token expires.
