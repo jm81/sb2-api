@@ -1,5 +1,15 @@
 Sequel.migration do
   change do
+    create_table(:profiles) do
+      primary_key :id
+      column :handle, "varchar(255)"
+      column :display_name, "varchar(255)"
+      column :created_at, "timestamp", :null=>false
+      column :updated_at, "timestamp", :null=>false
+      
+      index [:handle], :unique=>true
+    end
+    
     create_table(:schema_migrations) do
       column :filename, "varchar(255)", :null=>false
       
@@ -54,5 +64,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725205217_cr
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725235454_create_auth_tokens.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150809211350_rename_auth_methods_provider_name.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150907235022_add_auth_tokens_closed_at.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920192725_create_profiles.rb')"
                 end
               end
