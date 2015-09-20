@@ -45,6 +45,16 @@ Sequel.migration do
       index [:provider_name, :provider_id], :unique=>true
     end
     
+    create_table(:profile_members) do
+      primary_key :id
+      foreign_key :profile_id, :profiles, :null=>false, :on_delete=>:cascade, :on_update=>:cascade
+      foreign_key :member_profile_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
+      foreign_key :member_user_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
+      foreign_key :added_by_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
+      column :created_at, "timestamp", :null=>false
+      column :updated_at, "timestamp", :null=>false
+    end
+    
     create_table(:auth_tokens) do
       primary_key :id
       foreign_key :user_id, :users, :on_delete=>:restrict, :on_update=>:cascade
@@ -65,5 +75,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150725235454_cr
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150809211350_rename_auth_methods_provider_name.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150907235022_add_auth_tokens_closed_at.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920192725_create_profiles.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920203338_create_profile_members.rb')"
                 end
               end
