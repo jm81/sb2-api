@@ -6,7 +6,7 @@ Sequel.migration do
         on_delete: :cascade, on_update: :cascade
       foreign_key :member_profile_id, :profiles, null: true,
         on_delete: :cascade, on_update: :cascade
-      foreign_key :member_user_id, :profiles, null: true,
+      foreign_key :member_user_id, :users, null: true,
         on_delete: :cascade, on_update: :cascade
       foreign_key :added_by_id, :profiles, null: true,
         on_delete: :cascade, on_update: :cascade

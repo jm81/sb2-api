@@ -49,7 +49,7 @@ Sequel.migration do
       primary_key :id
       foreign_key :profile_id, :profiles, :null=>false, :on_delete=>:cascade, :on_update=>:cascade
       foreign_key :member_profile_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
-      foreign_key :member_user_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
+      foreign_key :member_user_id, :users, :on_delete=>:cascade, :on_update=>:cascade
       foreign_key :added_by_id, :profiles, :on_delete=>:cascade, :on_update=>:cascade
       column :created_at, "timestamp", :null=>false
       column :updated_at, "timestamp", :null=>false
