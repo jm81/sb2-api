@@ -2,6 +2,8 @@ class User < Sequel::Model
   EMAIL_REGEX = /.@./
   one_to_many :auth_methods
   one_to_many :auth_tokens
+  one_to_many :profile_members, key: :member_user_id
+  many_to_many :profiles, join_table: :profile_members, left_key: :member_user_id
 
   class << self
     # Find user by email address. Returns nil if the email address is not

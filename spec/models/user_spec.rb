@@ -45,6 +45,41 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#profile_members' do
+    before(:each) { user.save }
+
+    let!(:profile_member) do
+      FactoryGirl.create(:profile_member, member_user: user)
+    end
+
+    it 'has many' do
+      expect(User[user.id].profile_members).to eq([profile_member])
+    end
+
+    it 'cascades deletes' do
+      user.destroy
+      expect(ProfileMember[profile_member.id]).to be(nil)
+    end
+  end
+
+  describe '#profiles' do
+    before(:each) { user.save }
+
+    let!(:profile_member) do
+      FactoryGirl.create(:profile_member, member_user: user)
+    end
+
+    it 'has many through profile_members' do
+      expect(User[user.id].profiles).to eq([profile_member.profile])
+      expect(User[user.id].profiles[0]).to be_a(Profile)
+    end
+
+    it 'does not cascade delete' do
+      user.destroy
+      expect(Profile[profile_member.profile_id]).to be_a(Profile)
+    end
+  end
+
   describe '.find_by_email' do
     let!(:existing) { FactoryGirl.create(:user, email: 'test@example.com') }
 
