@@ -5,6 +5,41 @@ RSpec.describe Profile, type: :model do
 
   it { is_expected.to be_valid }
 
+  describe '#profile_members' do
+    before(:each) { profile.save }
+
+    let!(:profile_member) do
+      FactoryGirl.create(:profile_member, member_profile: profile)
+    end
+
+    it 'has many' do
+      expect(Profile[profile.id].profile_members).to eq([profile_member])
+    end
+
+    it 'cascades deletes' do
+      profile.destroy
+      expect(ProfileMember[profile_member.id]).to be(nil)
+    end
+  end
+
+  describe '#profiles' do
+    before(:each) { profile.save }
+
+    let!(:profile_member) do
+      FactoryGirl.create(:profile_member, member_profile: profile)
+    end
+
+    it 'has many through profile_members' do
+      expect(Profile[profile.id].profiles).to eq([profile_member.profile])
+      expect(Profile[profile.id].profiles[0]).to be_a(Profile)
+    end
+
+    it 'does not cascade delete' do
+      profile.destroy
+      expect(Profile[profile_member.profile_id]).to be_a(Profile)
+    end
+  end
+
   describe '#handle' do
     it 'is required' do
       profile.handle = nil

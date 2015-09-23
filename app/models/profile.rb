@@ -1,4 +1,8 @@
 class Profile < Sequel::Model
+  one_to_many :profile_members, key: :member_profile_id
+  many_to_many :profiles, join_table: :profile_members,
+    left_key: :member_profile_id
+
   plugin :validation_helpers
 
   # Validations for #handle follow twitter's requirements, because, hey, why
