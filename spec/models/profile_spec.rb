@@ -5,6 +5,67 @@ RSpec.describe Profile, type: :model do
 
   it { is_expected.to be_valid }
 
+  describe '#profile_members' do
+    before(:each) { profile.save }
+
+    let!(:profile_member) do
+      FactoryGirl.create(:profile_member, profile: profile)
+    end
+
+    it 'has many' do
+      expect(Profile[profile.id].profile_members).to eq([profile_member])
+    end
+
+    it 'cascades deletes' do
+      profile.destroy
+      expect(ProfileMember[profile_member.id]).to be(nil)
+    end
+  end
+
+  describe '#member_profiles' do
+    before(:each) { profile.save }
+
+    let(:member_profile) { FactoryGirl.create(:profile) }
+
+    let!(:profile_member) do
+      FactoryGirl.create(
+        :profile_member, profile: profile, member_profile: member_profile
+      )
+    end
+
+    it 'has many through profile_members' do
+      expect(Profile[profile.id].member_profiles).to eq([member_profile])
+      expect(Profile[profile.id].member_profiles[0]).to be_a(Profile)
+    end
+
+    it 'does not cascade delete' do
+      profile.destroy
+      expect(Profile[member_profile.id]).to be_a(Profile)
+    end
+  end
+
+  describe '#member_users' do
+    before(:each) { profile.save }
+
+    let(:member_user) { FactoryGirl.create(:user) }
+
+    let!(:user_member) do
+      FactoryGirl.create(
+        :profile_member, profile: profile, member_user: member_user
+      )
+    end
+
+    it 'has many through profile_members' do
+      expect(Profile[profile.id].member_users).to eq([member_user])
+      expect(Profile[profile.id].member_users[0]).to be_a(User)
+    end
+
+    it 'does not cascade delete' do
+      profile.destroy
+      expect(User[member_user.id]).to be_a(User)
+    end
+  end
+
   describe '#profile_memberships' do
     before(:each) { profile.save }
 

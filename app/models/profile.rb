@@ -1,4 +1,12 @@
 class Profile < Sequel::Model
+  # Has many Profiles/Users through ProfileMembers
+  one_to_many :profile_members
+  many_to_many :member_profiles, class: :Profile, join_table: :profile_members,
+    right_key: :member_profile_id
+  many_to_many :member_users, class: :User, join_table: :profile_members,
+    right_key: :member_user_id
+
+  # Belongs to other Profiles through ProfileMembers
   one_to_many :profile_memberships, class: :ProfileMember,
     key: :member_profile_id
   many_to_many :profiles, join_table: :profile_members,
