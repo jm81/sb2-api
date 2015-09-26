@@ -1,5 +1,6 @@
 class Profile < Sequel::Model
-  one_to_many :profile_members, key: :member_profile_id
+  one_to_many :profile_memberships, class: :ProfileMember,
+    key: :member_profile_id
   many_to_many :profiles, join_table: :profile_members,
     left_key: :member_profile_id
 

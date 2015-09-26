@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#profile_members' do
+  describe '#profile_memberships' do
     before(:each) { user.save }
 
     let!(:profile_member) do
@@ -53,7 +53,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'has many' do
-      expect(User[user.id].profile_members).to eq([profile_member])
+      expect(User[user.id].profile_memberships).to eq([profile_member])
     end
 
     it 'cascades deletes' do

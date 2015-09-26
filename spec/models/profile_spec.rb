@@ -5,7 +5,7 @@ RSpec.describe Profile, type: :model do
 
   it { is_expected.to be_valid }
 
-  describe '#profile_members' do
+  describe '#profile_memberships' do
     before(:each) { profile.save }
 
     let!(:profile_member) do
@@ -13,7 +13,8 @@ RSpec.describe Profile, type: :model do
     end
 
     it 'has many' do
-      expect(Profile[profile.id].profile_members).to eq([profile_member])
+      expect(Profile[profile.id].profile_memberships).
+        to eq([profile_member])
     end
 
     it 'cascades deletes' do
