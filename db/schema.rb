@@ -16,16 +16,6 @@ Sequel.migration do
       primary_key [:filename]
     end
     
-    create_table(:stories) do
-      primary_key :id
-      foreign_key :parent_id, :stories, :on_delete=>:restrict, :on_update=>:cascade
-      column :body, "text"
-      column :level, "integer", :null=>false
-      column :words, "integer", :null=>false
-      column :created_at, "timestamp"
-      column :updated_at, "timestamp"
-    end
-    
     create_table(:users) do
       primary_key :id
       column :email, "varchar(255)"
@@ -55,6 +45,17 @@ Sequel.migration do
       column :updated_at, "timestamp", :null=>false
     end
     
+    create_table(:stories) do
+      primary_key :id
+      foreign_key :parent_id, :stories, :on_delete=>:restrict, :on_update=>:cascade
+      column :body, "text"
+      column :level, "integer", :null=>false
+      column :words, "integer", :null=>false
+      column :created_at, "timestamp"
+      column :updated_at, "timestamp"
+      foreign_key :author_id, :profiles, :on_delete=>:restrict, :on_update=>:cascade
+    end
+    
     create_table(:auth_tokens) do
       primary_key :id
       foreign_key :user_id, :users, :on_delete=>:restrict, :on_update=>:cascade
@@ -76,5 +77,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150809211350_re
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150907235022_add_auth_tokens_closed_at.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920192725_create_profiles.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920203338_create_profile_members.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150926204026_stories_author.rb')"
                 end
               end
