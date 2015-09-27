@@ -1,4 +1,6 @@
 class Profile < Sequel::Model
+  include ActiveModel::SerializerSupport
+
   # Has many Profiles/Users through ProfileMembers
   one_to_many :profile_members
   many_to_many :member_profiles, class: :Profile, join_table: :profile_members,
