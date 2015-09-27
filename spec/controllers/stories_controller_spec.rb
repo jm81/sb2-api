@@ -21,7 +21,11 @@ RSpec.describe StoriesController, type: :controller do
     it 'returns a json collection' do
       do_get
       expect(response).to be_collection_resource
-      expect(response).to have_exposed(stories)
+      expect(response.body).to eq({
+        response:
+          stories.collect { |s| StorySerializer.new(s).serializable_hash },
+        count: 2
+      }.to_json)
     end
   end
 
@@ -33,7 +37,9 @@ RSpec.describe StoriesController, type: :controller do
     it 'return a json resource' do
       do_get
       expect(response).to be_singular_resource
-      expect(response).to have_exposed(story)
+      expect(response.body).to eq({
+        response: StorySerializer.new(story).serializable_hash
+      }.to_json)
     end
   end
 end
