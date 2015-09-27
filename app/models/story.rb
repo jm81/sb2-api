@@ -1,4 +1,6 @@
 class Story < Sequel::Model
+  include ActiveModel::SerializerSupport
+
   plugin :validation_helpers
 
   many_to_one :author, class: :Profile
