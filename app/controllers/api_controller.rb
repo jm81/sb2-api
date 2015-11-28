@@ -1,4 +1,6 @@
 class APIController < RocketPants::Base
+  include ActionController::ParamsWrapper
+
   before_action :set_current_auth_token
 
   private
