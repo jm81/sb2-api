@@ -16,4 +16,9 @@ class APIController < RocketPants::Base
     token = request.headers['Authorization'].to_s.split(' ').last
     @current_auth_token = token && AuthToken.use(token)
   end
+
+  # Requite an authenticated user or return unauthenticated error.
+  def require_authenticated
+    error! :unauthenticated if current_user.nil?
+  end
 end
