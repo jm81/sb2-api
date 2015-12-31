@@ -6,6 +6,11 @@ class User < Sequel::Model
   many_to_many :profiles, join_table: :profile_members,
     left_key: :member_user_id
 
+  # @return [Profile] Default profile, currently the first profile.
+  def default_profile
+    profiles_dataset.order(:id).first
+  end
+
   class << self
     # Find user by email address. Returns nil if the email address is not
     # valid (for a minimal version of valid)

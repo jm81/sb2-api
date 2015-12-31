@@ -80,6 +80,26 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#default_profile' do
+    before(:each) { user.save }
+
+    context 'has profiles' do
+      let!(:profile_members) do
+        FactoryGirl.create_list(:profile_member, 3, member_user: user)
+      end
+
+      it 'is the first profile' do
+        expect(User[user.id].default_profile).to eq(profile_members[0].profile)
+      end
+    end
+
+    context 'no profiles' do
+      it 'is nil' do
+        expect(User[user.id].default_profile).to be(nil)
+      end
+    end
+  end
+
   describe '.find_by_email' do
     let!(:existing) { FactoryGirl.create(:user, email: 'test@example.com') }
 
