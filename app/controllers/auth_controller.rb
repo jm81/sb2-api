@@ -15,6 +15,7 @@ class AuthController < APIController
     render_json({
       user_id: current_user.id,
       display_name: current_user.display_name,
+      profile_id: current_profile.try(:id)
     })
   end
 

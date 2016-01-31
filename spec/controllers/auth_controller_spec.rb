@@ -43,19 +43,40 @@ RSpec.describe AuthController, type: :controller do
   end
 
   describe '#session' do
-    use_auth_token
+    context '#current_profile is set' do
+      use_auth_token
 
-    before(:each) do
-      session_auth_token.user.update(display_name: 'test name')
+      before(:each) do
+        session_auth_token.user.update(display_name: 'test name')
+      end
+
+      it 'renders json with session information' do
+        get :session, version: 1
+
+        expect(response.body).to eq({
+          user_id: session_auth_token.user.id,
+          display_name: 'test name',
+          profile_id: session_auth_token.user.default_profile.id
+        }.to_json)
+      end
     end
 
-    it 'renders json with session information' do
-      get :session, version: 1
+    context '#current_profile is not set' do
+      use_auth_token_without_profile
 
-      expect(response.body).to eq({
-        user_id: session_auth_token.user.id,
-        display_name: 'test name'
-      }.to_json)
+      before(:each) do
+        session_auth_token.user.update(display_name: 'no profile name')
+      end
+
+      it 'has a nil current profile id' do
+        get :session, version: 1
+
+        expect(response.body).to eq({
+          user_id: session_auth_token.user.id,
+          display_name: 'no profile name',
+          profile_id: nil
+        }.to_json)
+      end
     end
   end
 end
