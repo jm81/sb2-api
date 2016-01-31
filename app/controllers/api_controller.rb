@@ -10,6 +10,12 @@ class APIController < RocketPants::Base
     @current_auth_token.try(:user)
   end
 
+  # @return [Profile] Current profile, which is current_user's default profile.
+  # @todo allow setting particular profile.
+  def current_profile
+    current_user.try(:default_profile)
+  end
+
   # Set @current_auth_token by passing encoded token from Authorization header,
   # if any, to AuthToken.use.
   def set_current_auth_token
