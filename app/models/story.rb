@@ -14,4 +14,13 @@ class Story < Sequel::Model
       errors.add(:level, 'must be a positive integer')
     end
   end
+
+  class << self
+    # Get word count for text, using Microsoft Word standard.
+    #
+    # @return [Integer] Word count.
+    def word_count text
+      WordCountAnalyzer::Counter.new(text: text).mword_count
+    end
+  end
 end
