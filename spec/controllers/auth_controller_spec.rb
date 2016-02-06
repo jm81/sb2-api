@@ -48,14 +48,16 @@ RSpec.describe AuthController, type: :controller do
 
       before(:each) do
         session_auth_token.user.update(display_name: 'test name')
+        session_auth_token.user.default_profile.
+          update(display_name: 'profile name')
       end
 
-      it 'renders json with session information' do
+      it 'renders json with session information, including profile' do
         get :session, version: 1
 
         expect(response.body).to eq({
           user_id: session_auth_token.user.id,
-          display_name: 'test name',
+          display_name: 'profile name',
           profile_id: session_auth_token.user.default_profile.id
         }.to_json)
       end
