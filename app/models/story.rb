@@ -5,6 +5,16 @@ class Story < Sequel::Model
 
   many_to_one :author, class: :Profile
 
+  # Set body and words (word count) from value.
+  #
+  # @param value [String] Body (text) of story.
+  def body= value
+    self.words = self.class.word_count value
+    super
+  end
+
+  private
+
   def validate
     super
 

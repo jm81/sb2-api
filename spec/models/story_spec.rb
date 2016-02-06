@@ -35,6 +35,20 @@ RSpec.describe Story, type: :model do
     end
   end
 
+  describe '#body=' do
+    it 'sets words' do
+      story.body = 'Hello, there. How are you?'
+      expect(story.words).to eq(5)
+      story.body = "Mrs. Watts-Up is here to see y'all"
+      expect(story.words).to eq(7)
+    end
+
+    it 'sets body' do
+      story.body = 'Hi, Worlds'
+      expect(story.body).to eq('Hi, Worlds')
+    end
+  end
+
   describe '.word_count' do
     it 'gets a count of words for the text' do
       expect(Story.word_count('Hello, there. How are you?')).to eq(5)
