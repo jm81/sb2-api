@@ -26,7 +26,8 @@ class Profile < Sequel::Model
 
     # handle case-insensitive unique
     # http://stackoverflow.com/questions/11442733
-    dataset = model.where{ |o| {o.lower(:handle)=>o.lower(handle)}}
+    dataset = model.exclude(id: id).
+      where { |o| { o.lower(:handle) => o.lower(handle) } }
     dataset.exclude(pk_hash) unless new?
     errors.add(:handle, 'is already taken') unless 0 == dataset.count
   end

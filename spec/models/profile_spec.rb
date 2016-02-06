@@ -135,6 +135,22 @@ RSpec.describe Profile, type: :model do
       profile.handle = existing.handle.upcase
       expect(profile.valid?).to be(false)
     end
+
+    context 'updating' do
+      it 'is unique (case-insensitive)' do
+        existing = FactoryGirl.create(:profile)
+        profile.save
+        profile.handle = existing.handle
+        expect(profile.valid?).to be(false)
+        profile.handle = existing.handle.upcase
+        expect(profile.valid?).to be(false)
+      end
+
+      it 'does not have a validation error due to self' do
+        profile.save
+        expect(profile.valid?).to be(true)
+      end
+    end
   end
 
   describe '#display_name' do
