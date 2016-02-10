@@ -4,6 +4,8 @@ class Story < Sequel::Model
   plugin :validation_helpers
 
   many_to_one :author, class: :Profile
+  many_to_one :parent, class: :Story
+  one_to_many :children, class: :Story, key: :parent_id
 
   # Set body and words (word count) from value.
   #

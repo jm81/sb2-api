@@ -17,6 +17,21 @@ RSpec.describe Story, type: :model do
     end
   end
 
+  describe '#parent' do
+    it 'can belong to a parent Story' do
+      story.parent = FactoryGirl.create(:story)
+      expect(story.parent).to be_a(Story)
+    end
+  end
+
+  describe '#children' do
+    it 'has many children Stories' do
+      story.save
+      children = FactoryGirl.create_list(:story, 2, parent: story)
+      expect(Story[story.id].children).to eq(children)
+    end
+  end
+
   describe '#level' do
     context 'missing' do
       it 'fails validation' do
