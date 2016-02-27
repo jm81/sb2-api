@@ -7,6 +7,8 @@ class Story < Sequel::Model
   many_to_one :parent, class: :Story
   one_to_many :children, class: :Story, key: :parent_id
 
+  attr_writer :direction
+
   # Set body and words (word count) from value.
   #
   # @param value [String] Body (text) of story.
@@ -17,7 +19,21 @@ class Story < Sequel::Model
 
   private
 
+  # If @direction is set, set level in relation to parent.
+  def set_level_from_direction
+    return nil unless parent
+
+    case @direction
+    when '+'
+      self.level = parent.level + 1
+    when '-'
+      self.level = parent.level - 1
+    end
+  end
+
   def validate
+    set_level_from_direction
+
     super
 
     validates_presence :author

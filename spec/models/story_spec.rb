@@ -64,6 +64,52 @@ RSpec.describe Story, type: :model do
     end
   end
 
+  describe '#set_level_from_direction' do
+    before(:each) do
+      story.level = nil
+      story.parent = FactoryGirl.create :story, level: 4
+    end
+
+    context '@direction is missing' do
+      it 'does nothing' do
+        story.send :set_level_from_direction
+        expect(story.level).to be(nil)
+      end
+    end
+
+    context 'parent is missing' do
+      it 'does nothing' do
+        story.direction = '+'
+        story.parent = nil
+        story.send :set_level_from_direction
+        expect(story.level).to be(nil)
+      end
+    end
+
+    context '@direction is +' do
+      it 'sets level to parent level plus 1' do
+        story.direction = '+'
+        story.send :set_level_from_direction
+        expect(story.level).to be(5)
+      end
+    end
+
+    context '@direction is -' do
+      it 'sets level to parent level minus 1' do
+        story.direction = '-'
+        story.send :set_level_from_direction
+        expect(story.level).to be(3)
+      end
+    end
+
+    it 'is called by validate' do
+      story.direction = '-'
+      expect(story.level).to be(nil)
+      story.valid?
+      expect(story.level).to be(3)
+    end
+  end
+
   describe '.word_count' do
     it 'gets a count of words for the text' do
       expect(Story.word_count('Hello, there. How are you?')).to eq(5)
