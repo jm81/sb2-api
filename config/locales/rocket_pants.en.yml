@@ -1,0 +1,4 @@
+en:
+  rocket_pants:
+    errors:
+      missing_profile: User has no default profile.
