@@ -27,4 +27,9 @@ class APIController < RocketPants::Base
   def require_authenticated
     error! :unauthenticated if current_user.nil?
   end
+
+  # Requite an authenticated user or return missing profile error.
+  def require_profile
+    error! :missing_profile if current_profile.nil?
+  end
 end
