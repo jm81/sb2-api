@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   api version: 1 do
     resources :profiles, only: [:create]
-    resources :stories, only: [:index, :show]
+    resources :stories, only: [:index, :show, :create]
 
     get 'auth', to: 'auth#session'
     post 'auth/logout', to: 'auth#logout'
