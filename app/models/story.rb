@@ -36,7 +36,7 @@ class Story < Sequel::Model
 
     super
 
-    validates_presence :author
+    validates_presence [:author, :body]
 
     if level.blank? || level.to_i < 0
       errors.add(:level, 'must be a positive integer')

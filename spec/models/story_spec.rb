@@ -62,6 +62,11 @@ RSpec.describe Story, type: :model do
       story.body = 'Hi, Worlds'
       expect(story.body).to eq('Hi, Worlds')
     end
+
+    it 'is required' do
+      story.body = nil
+      expect(story).to_not be_valid
+    end
   end
 
   describe '#set_level_from_direction' do
