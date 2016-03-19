@@ -48,7 +48,7 @@ class Story < Sequel::Model
     #
     # @return [Integer] Word count.
     def word_count text
-      WordCountAnalyzer::Counter.new(text: text).mword_count
+      WordCountAnalyzer::Counter.new(text: text.to_s).mword_count
     end
   end
 end

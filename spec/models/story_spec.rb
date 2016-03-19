@@ -114,6 +114,8 @@ RSpec.describe Story, type: :model do
     it 'gets a count of words for the text' do
       expect(Story.word_count('Hello, there. How are you?')).to eq(5)
       expect(Story.word_count("Mrs. Watts-Up is here to see y'all")).to eq(7)
+      expect(Story.word_count('')).to eq(0)
+      expect(Story.word_count(nil)).to eq(0)
     end
   end
 end
