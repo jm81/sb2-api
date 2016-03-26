@@ -123,4 +123,12 @@ RSpec.describe Story, type: :model do
       expect(Story.word_count(nil)).to eq(0)
     end
   end
+
+  describe '.word_count_checker' do
+    it 'includes actual, expected, range and type' do
+      expect(Story.word_count_check('a b', 1).to_hash).to eq({
+        actual: 2, expected: 2, range: (2..2), type: :exact
+      })
+    end
+  end
 end

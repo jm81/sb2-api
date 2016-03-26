@@ -48,7 +48,15 @@ class Story < Sequel::Model
     #
     # @return [Integer] Word count.
     def word_count text
-      WordCountAnalyzer::Counter.new(text: text.to_s).mword_count
+      WordCountChecker.new(text).actual
+    end
+
+    # Get a hash suitable for building JSON, with the following keys:
+    # :actual, :expected, :range, :type
+    #
+    # @return [Hash]
+    def word_count_check text, level
+      WordCountChecker.new(text, level).to_hash
     end
   end
 end
