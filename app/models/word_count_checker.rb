@@ -45,14 +45,17 @@ class WordCountChecker
   end
 
   # Build a hash suitable for building JSON, with the following keys:
-  # :actual, :expected, :range, :type.
+  # :level, :actual, :expected, :range, :type.
   #
   # Only :actual is returned if @level is not set.
   #
   # @return [Hash]
   def to_hash
     if @level
-      { actual: actual, expected: expected, range: range, type: type }
+      {
+        level: @level, actual: actual, expected: expected, range: range,
+        type: type
+      }
     else
       { actual: actual }
     end

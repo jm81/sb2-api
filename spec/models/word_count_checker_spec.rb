@@ -93,9 +93,9 @@ RSpec.describe WordCountChecker do
   end
 
   describe '#to_hash' do
-    it 'includes actual, expected, range and type' do
+    it 'includes level, actual, expected, range and type' do
       expect(checker.to_hash).to eq({
-        actual: 15, expected: 16, range: (15..17), type: :close
+        level: 4, actual: 15, expected: 16, range: (15..17), type: :close
       })
     end
 
