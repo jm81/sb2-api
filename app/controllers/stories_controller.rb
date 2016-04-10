@@ -13,7 +13,7 @@ class StoriesController < APIController
   end
 
   def show
-    expose Story.find(params[:id]), serializer: StorySerializer
+    expose Story[params[:id]], serializer: StorySerializer
   end
 
   def create
