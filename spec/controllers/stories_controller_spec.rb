@@ -116,4 +116,50 @@ RSpec.describe StoriesController, type: :controller do
       end
     end
   end
+
+  describe 'get word_count' do
+    before(:each) { stories }
+
+    def do_get
+      get :word_count, { version: 1 }.merge(params)
+    end
+
+    context 'level is present' do
+      let(:params) { { body: 'a b c', level: 2 } }
+
+      it 'returns json with full word count details' do
+        do_get
+        expect(response.body).to eq({
+          response: {
+            level: 2, actual: 3, expected: 4, range: (4..4), type: :none
+          }
+        }.to_json)
+      end
+    end
+
+    context 'parent_id is present without level' do
+      let(:parent) { FactoryGirl.create :story, level: 3 }
+      let(:params) { { body: 'a b c d', parent_id: parent.id, direction: '-' } }
+
+      it 'returns json with full word count details using parent level' do
+        do_get
+        expect(response.body).to eq({
+          response: {
+            level: 2, actual: 4, expected: 4, range: (4..4), type: :exact
+          }
+        }.to_json)
+      end
+    end
+
+    context 'neither level nor parent_id is set' do
+      let(:params) { { body: 'a b c' } }
+
+      it 'returns json with only actual word count' do
+        do_get
+        expect(response.body).to eq({
+          response: { actual: 3 }
+        }.to_json)
+      end
+    end
+  end
 end

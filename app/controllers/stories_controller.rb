@@ -4,8 +4,9 @@ class StoriesController < APIController
 
   version 1
 
-  before_action :require_authenticated, except: [:index, :show]
-  before_action :require_profile, except: [:index, :show]
+  PUBLIC_ACTIONS = [:index, :show, :word_count]
+  before_action :require_authenticated, except: PUBLIC_ACTIONS
+  before_action :require_profile, except: PUBLIC_ACTIONS
 
   def index
     expose Story.eager(:author).all, each_serializer: StorySerializer
@@ -25,6 +26,16 @@ class StoriesController < APIController
     else
       error! :invalid_resource, story.errors
     end
+  end
+
+  def word_count
+    if params[:level].present?
+      level = params[:level]
+    elsif params[:parent_id]
+      level = Story[params[:parent_id]].level_for_child params[:direction]
+    end
+
+    expose Story.word_count_check(params[:body], level)
   end
 
   private
