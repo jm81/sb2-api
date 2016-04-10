@@ -17,17 +17,28 @@ class Story < Sequel::Model
     super
   end
 
+  # If given a direction of '+' or '-', determine the level for a child of this
+  # Story as either one greater or one less than this Story's level.
+  #
+  # @param direction [String] '+' or '-'.
+  # @return [Integer, nil] Level for child, or nil if direction is not valid.
+  def level_for_child direction
+    case direction
+    when '+'
+      level + 1
+    when '-'
+      level - 1
+    else
+      nil
+    end
+  end
+
   private
 
   # If @direction is set, set level in relation to parent.
   def set_level_from_direction
-    return nil unless parent
-
-    case @direction
-    when '+'
-      self.level = parent.level + 1
-    when '-'
-      self.level = parent.level - 1
+    if parent && @direction
+      self.level = parent.level_for_child @direction
     end
   end
 

@@ -69,6 +69,28 @@ RSpec.describe Story, type: :model do
     end
   end
 
+  describe '#level_for_child' do
+    before(:each) { story.level = 4 }
+
+    context 'direction is +' do
+      it 'is level plus 1' do
+        expect(story.level_for_child('+')).to be(5)
+      end
+    end
+
+    context 'direction is -' do
+      it 'is level minus 1' do
+        expect(story.level_for_child('-')).to be(3)
+      end
+    end
+
+    context 'direction is other' do
+      it 'is nil' do
+        expect(story.level_for_child('')).to be(nil)
+      end
+    end
+  end
+
   describe '#set_level_from_direction' do
     before(:each) do
       story.level = nil
