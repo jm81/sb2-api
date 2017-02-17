@@ -30,16 +30,6 @@ RSpec.describe AuthMethod, type: :model do
     end
   end
 
-  describe '#provider_name' do
-    it 'is an enum' do
-      { test: 1, github: 2 }.each do |value, index|
-        auth_method.provider_name = value
-        expect(auth_method.provider_name).to eq(value)
-        expect(auth_method[:provider_name]).to eq(index)
-      end
-    end
-  end
-
   describe '#create_token' do
     before(:each) { auth_method.save }
 
@@ -59,26 +49,26 @@ RSpec.describe AuthMethod, type: :model do
     let!(:auth_methods) do
       [
         FactoryGirl.create(
-          :auth_method, provider_name: :github, provider_id: 2
+          :auth_method, provider_name: 'github', provider_id: 2
         ),
         FactoryGirl.create(
-          :auth_method, provider_name: :github, provider_id: 4
+          :auth_method, provider_name: 'github', provider_id: 4
         )
       ]
     end
 
     it 'gets an AuthMethod from provider_name and provider_id' do
       expect(
-        AuthMethod.by_provider_data(provider_name: :github, provider_id: 2)
+        AuthMethod.by_provider_data(provider_name: 'github', provider_id: 2)
       ).to eq(auth_methods[0])
       expect(
-        AuthMethod.by_provider_data(provider_name: :github, provider_id: '4')
+        AuthMethod.by_provider_data(provider_name: 'github', provider_id: '4')
       ).to eq(auth_methods[1])
       expect(
-        AuthMethod.by_provider_data(provider_name: :other, provider_id: 2)
+        AuthMethod.by_provider_data(provider_name: 'other', provider_id: 2)
       ).to be(nil)
       expect(
-        AuthMethod.by_provider_data(provider_name: :github, provider_id: 1)
+        AuthMethod.by_provider_data(provider_name: 'github', provider_id: 1)
       ).to be(nil)
     end
   end

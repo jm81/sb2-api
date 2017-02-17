@@ -1,12 +1,7 @@
 class AuthMethod < Sequel::Model
-  plugin :enum
-
   many_to_one :user
 
   one_to_many :auth_tokens
-
-  PROVIDERS = { 1 => :test, 2 => :github }
-  enum :provider_name, PROVIDERS
 
   # Create AuthToken, setting user and last_used_at
   #
@@ -23,9 +18,7 @@ class AuthMethod < Sequel::Model
     # @param provider_data [Hash]
     # @return [AuthMethod]
     def by_provider_data provider_data
-      conditions = provider_data.dup
-      conditions[:provider_name] = PROVIDERS.key conditions[:provider_name]
-      where(conditions).first
+      where(provider_data).first
     end
   end
 end

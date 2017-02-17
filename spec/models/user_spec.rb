@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
     before(:each) { user.save }
 
     let!(:auth_method) do
-      user.add_auth_method provider_name: :test, provider_id: 1
+      user.add_auth_method provider_name: 'test', provider_id: 1
     end
 
     it 'has many' do
@@ -146,7 +146,7 @@ RSpec.describe User, type: :model do
 
     let!(:auth_method) do
       FactoryGirl.create :auth_method,
-        user: user, provider_name: :github, provider_id: 5
+        user: user, provider_name: 'github', provider_id: 5
     end
 
     def login
@@ -162,7 +162,7 @@ RSpec.describe User, type: :model do
         expect(oauth).to_not receive(:email)
 
         expect(oauth).to receive(:provider_data) do
-          { provider_name: :github, provider_id: 5 }
+          { provider_name: 'github', provider_id: 5 }
         end
       end
 
@@ -189,7 +189,7 @@ RSpec.describe User, type: :model do
     context 'no existing AuthMethod' do
       before(:each) do
         expect(oauth).to receive(:provider_data).twice do
-          { provider_name: :github, provider_id: 10 }
+          { provider_name: 'github', provider_id: 10 }
         end
       end
 
@@ -209,7 +209,7 @@ RSpec.describe User, type: :model do
           expect { login }.to change(AuthMethod, :count).by(1)
           expect(auth_method.provider_id).to eq(5)
           expect(@login_method.id).to_not eq(auth_method.id)
-          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_name).to eq('github')
           expect(@login_method.provider_id).to eq(10)
           expect(@login_method.user.id).to eq(user.id)
         end
@@ -239,7 +239,7 @@ RSpec.describe User, type: :model do
           expect { login }.to change(AuthMethod, :count).by(1)
           expect(auth_method.provider_id).to eq(5)
           expect(@login_method.id).to_not eq(auth_method.id)
-          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_name).to eq('github')
           expect(@login_method.provider_id).to eq(10)
           expect(@login_method.user.id).to eq(@login_user.id)
         end
@@ -270,7 +270,7 @@ RSpec.describe User, type: :model do
           expect { login }.to change(AuthMethod, :count).by(1)
           expect(auth_method.provider_id).to eq(5)
           expect(@login_method.id).to_not eq(auth_method.id)
-          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_name).to eq('github')
           expect(@login_method.provider_id).to eq(10)
           expect(@login_method.user.id).to eq(@login_user.id)
         end
@@ -301,7 +301,7 @@ RSpec.describe User, type: :model do
           expect { login }.to change(AuthMethod, :count).by(1)
           expect(auth_method.provider_id).to eq(5)
           expect(@login_method.id).to_not eq(auth_method.id)
-          expect(@login_method.provider_name).to eq(:github)
+          expect(@login_method.provider_name).to eq('github')
           expect(@login_method.provider_id).to eq(10)
           expect(@login_method.user.id).to eq(@login_user.id)
         end

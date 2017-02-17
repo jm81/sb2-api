@@ -27,7 +27,7 @@ Sequel.migration do
     create_table(:auth_methods) do
       primary_key :id
       foreign_key :user_id, :users, :on_delete=>:cascade, :on_update=>:cascade
-      column :provider_name, "tinyint unsigned", :null=>false
+      column :provider_name, "varchar(255)", :null=>false
       column :provider_id, "integer unsigned", :null=>false
       column :created_at, "timestamp", :null=>false
       column :updated_at, "timestamp", :null=>false
@@ -78,5 +78,6 @@ self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150907235022_ad
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920192725_create_profiles.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150920203338_create_profile_members.rb')"
 self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20150926204026_stories_author.rb')"
+self << "INSERT INTO `schema_migrations` (`filename`) VALUES ('20170217035929_auth_method_provider_name_string.rb')"
                 end
               end
