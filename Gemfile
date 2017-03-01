@@ -15,8 +15,7 @@ end
 gem 'sqlite3'
 
 gem 'active_model_serializers', '~> 0.9.3'
-gem 'httpclient', '~> 2.6.0.1'
-gem 'jwt', '~> 1.5.1'
+gem 'jm81auth', '0.1.0'
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors'
 gem 'rocket_pants', '~> 1.12.1'
 gem 'sequel-rails', '~> 0.9.11'

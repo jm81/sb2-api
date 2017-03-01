@@ -23,12 +23,12 @@ class APIController < RocketPants::Base
     @current_auth_token = token && AuthToken.use(token)
   end
 
-  # Requite an authenticated user or return unauthenticated error.
+  # Require an authenticated user or return unauthenticated error.
   def require_authenticated
     error! :unauthenticated if current_user.nil?
   end
 
-  # Requite an authenticated user or return missing profile error.
+  # Require an authenticated user or return missing profile error.
   def require_profile
     error! :missing_profile if current_profile.nil?
   end

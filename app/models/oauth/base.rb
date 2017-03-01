@@ -47,7 +47,7 @@ module OAuth
 
     # @return [Symbol] Provider name, based on class name.
     def provider_name
-      self.class.name.split('::').last.downcase.to_sym
+      self.class.name.split('::').last.downcase
     end
 
     # @return [String] Provider assigned ID, from data.

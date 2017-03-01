@@ -135,8 +135,8 @@ RSpec.describe OAuth::Base do
 
   describe '#provider_name' do
     it 'gets provider name based on the class name' do
-      expect(oauth.provider_name).to eq(:oauthprovider)
-      expect(OAuth::Base.new(access_token: 'a').provider_name).to eq(:base)
+      expect(oauth.provider_name).to eq('oauthprovider')
+      expect(OAuth::Base.new(access_token: 'a').provider_name).to eq('base')
     end
   end
 
@@ -162,7 +162,7 @@ RSpec.describe OAuth::Base do
   describe 'provider_data' do
     it 'is a hash with provider_name and provider_id' do
       expect(oauth.provider_data).to eq({
-        provider_name: :oauthprovider,
+        provider_name: 'oauthprovider',
         provider_id: '123'
       })
     end
